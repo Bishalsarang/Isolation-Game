@@ -16,7 +16,7 @@ graphics_grid = [
 
 
 directions = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (-1, 2), (1, -2), (-1, -2)]
-white_turn = False
+white_turn = True
 
 # Starting Position
 grid[0][3] = 'W'
