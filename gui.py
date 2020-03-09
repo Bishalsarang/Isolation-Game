@@ -104,6 +104,7 @@ def new_game():
 
 
 def draw_board():
+    # canvas.delete(all)
     global white_turn
     x, y = 50, 50
 
@@ -148,6 +149,7 @@ def draw_board():
 
 root = Tk()
 root.geometry('1024x768')
+root.title("Isolation Game")
 root.resizable(False, False)
 board_frame = Frame()
 moves_frame = Frame()
