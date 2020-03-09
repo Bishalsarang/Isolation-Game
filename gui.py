@@ -1,5 +1,6 @@
 from tkinter import Tk, Canvas, Frame, Label, PhotoImage, NW
 from random import randint
+from agent import Agent
 
 grid = [['_' for _ in range(7)] for _ in range(7)]
 
@@ -56,7 +57,7 @@ def clicked(event):
         for offset_x, offset_y in directions:
             next_white_x, next_white_y = white_x + offset_x, white_y + offset_y
 
-            if is_valid(next_white_x, next_white_y) and grid[next_white_x][next_white_y] != 'X' and row == next_white_x and col == next_white_y:
+            if is_valid(next_white_x, next_white_y) and grid[next_white_x][next_white_y] == '_' and row == next_white_x and col == next_white_y:
                 grid[white_x][white_y] = 'X'
                 grid[next_white_x][next_white_y] = 'W'
 
@@ -68,7 +69,7 @@ def clicked(event):
         for offset_x, offset_y in directions:
             next_black_x, next_black_y = black_x + offset_x, black_y + offset_y
 
-            if is_valid(next_black_x, next_black_y) and grid[next_black_x][next_black_y] != 'X' and row == next_black_x and col == next_black_y:
+            if is_valid(next_black_x, next_black_y) and grid[next_black_x][next_black_y] == '_' and row == next_black_x and col == next_black_y:
                 grid[black_x][black_y] = 'X'
                 grid[next_black_x][next_black_y] = 'B'
                 white_turn = not white_turn
@@ -87,11 +88,36 @@ def graphics_coords_to_index(x, y):
                 return i, j
 
 
-print(graphics_coords_to_index(130, 370))
+def new_game():
+    global  white_turn
+    # Turn
+    if white_turn:
+        ag = Agent(True, grid, 7)
+        ag.find_best_move()
+        frm, to = ag.best_move
+        x1, y1 = frm
+        x2, y2 = to
+        grid[x1][y1] = 'X'
+        grid[x2][y2] = 'W'
+        white_turn = not white_turn
+        root.after(300, draw_board)
+
 
 def draw_board():
+    global white_turn
     x, y = 50, 50
-    coords = set()
+
+    if white_turn:
+        ag = Agent(True, grid, 7)
+        ag.find_best_move()
+        frm, to = ag.best_move
+        x1, y1 = frm
+        x2, y2 = to
+        grid[x1][y1] = 'X'
+        grid[x2][y2] = 'W'
+        white_turn = not white_turn
+        root.after(300, draw_board)
+
     for i in range(7):
         for j in range(7):
 
@@ -118,8 +144,6 @@ def draw_board():
             bottom_corner_coordinates = (x + i * BOX_WIDTH, y + j * BOX_HEIGHT)
             top_corner_coordinates = (x + (i + 1) * BOX_WIDTH, y + (j + 1) * BOX_HEIGHT)
 
-            coords.add(bottom_corner_coordinates)
-            coords.add(top_corner_coordinates)
             canvas.create_rectangle(bottom_corner_coordinates, top_corner_coordinates)
 
 root = Tk()
@@ -145,7 +169,7 @@ black_box = PhotoImage(file=BLACK_BOX_PATH)
 white_knight = PhotoImage(file=WHITE_KNIGHT_PATH)
 black_knight = PhotoImage(file=BLACK_KNIGHT_PATH)
 occupied = PhotoImage(file=OCCUPIED_PATH)
-draw_board()
+new_game()
 
 # canvas.create_image(400, 128, image=black_box, anchor=NW)
 canvas.pack()
