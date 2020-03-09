@@ -16,10 +16,11 @@ graphics_grid = [
 
 
 directions = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (-1, 2), (1, -2), (-1, -2)]
-white_turn = True
-grid[0][0] = 'W'
+white_turn = False
 
-grid[6][6] = 'B'
+# Starting Position
+grid[0][3] = 'W'
+grid[6][3] = 'B'
 
 
 BOX_WIDTH = 80
@@ -100,7 +101,7 @@ def new_game():
         grid[x1][y1] = 'X'
         grid[x2][y2] = 'W'
         white_turn = not white_turn
-        root.after(300, draw_board)
+    root.after(300, draw_board)
 
 
 def draw_board():
